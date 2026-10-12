@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Route Finder</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="logo">AU</div>
+
+    <div>
+        <p class="eyebrow">ALLIANCE UNIVERSITY</p>
+        <h1>Campus Route Finder</h1>
+    </div>
+
+    <div class="connection">
+        <span id="connectionDot"></span>
+        <span id="connectionText">Checking server...</span>
+    </div>
+</header>
+
+<main class="layout">
+
+    <aside class="sidebar">
+
+        <p class="eyebrow">NAVIGATION</p>
+        <h2>Find your route</h2>
+
+        <p class="muted">
+            Select your starting point and destination.
+            The selected route will be highlighted on the map.
+        </p>
+
+        <form id="routeForm">
+
+            <label for="start">Starting Point</label>
+            <select id="start" name="start" required></select>
+
+            <button type="button" id="swapLocations" class="swap">
+                ⇅ Swap locations
+            </button>
+
+            <label for="destination">Destination</label>
+            <select id="destination" name="destination" required></select>
+
+            <label for="algorithm">Algorithm</label>
+
+            <select id="algorithm" name="algorithm">
+                <option value="dijkstra">
+                    Dijkstra — Shortest Distance
+                </option>
+
+                <option value="bfs">
+                    BFS — Fewest Road Segments
+                </option>
+
+                <option value="dfs">
+                    DFS — Depth-First Search
+                </option>
+            </select>
+
+            <button type="submit" class="primary">
+                Find Route →
+            </button>
+
+            <button type="button" id="resetMap" class="secondary">
+                Reset Map
+            </button>
+
+        </form>
+
+        <div id="status" class="status">
+            Connecting to the C++ server...
+        </div>
+
+        <section id="routeResults" class="results" hidden>
+
+            <p class="eyebrow">ROUTE SUMMARY</p>
+
+            <h3 id="routeTitle">Route found</h3>
+
+            <div class="distance-card">
+                <span>Route cost</span>
+                <strong id="routeDistance">—</strong>
+            </div>
+
+            <p id="algorithmTag" class="algorithm-tag"></p>
+
+            <h4>Locations along the route</h4>
+
+            <ol id="directions"></ol>
+
+        </section>
+
+        <p class="note">
+            Road connections and distances are illustrative estimates.
+        </p>
+
+    </aside>
+
+    <section class="map-panel">
+
+        <div class="map-heading">
+            <div>
+                <p class="eyebrow">CAMPUS OVERVIEW</p>
+                <h2>Campus Map</h2>
+            </div>
+
+            <div class="legend">
+                <span><i class="dot start-dot"></i> Start</span>
+                <span><i class="dot end-dot"></i> Destination</span>
+                <span><i class="line-key"></i> Route</span>
+            </div>
+        </div>
+
+        <div class="map-scroll">
+
+            <svg id="mapSvg"
+                 viewBox="0 0 850 590"
+                 role="img"
+                 aria-label="Campus route map">
+
+                <defs>
+                    <pattern id="grid"
+                             width="25"
+                             height="25"
+                             patternUnits="userSpaceOnUse">
+
+                        <path d="M25 0H0V25"
+                              fill="none"
+                              stroke="#e8efe9"
+                              stroke-width="1"/>
+                    </pattern>
+                </defs>
+
+                <rect width="850" height="590"
+                      rx="18" fill="#f7faf7"/>
+
+                <rect width="850" height="590"
+                      rx="18" fill="url(#grid)"/>
+
+                <g class="decor">
+
+                    <path d="M25 555 C180 510 230 545 355 535 S650 555 825 510"
+                          fill="none"
+                          stroke="#dfece1"
+                          stroke-width="28"
+                          stroke-linecap="round"/>
+
+                    <path d="M40 60 C160 85 220 50 310 85 S570 65 810 40"
+                          fill="none"
+                          stroke="#dfece1"
+                          stroke-width="24"
+                          stroke-linecap="round"/>
+
+                    <rect x="300" y="180"
+                          width="135" height="82"
+                          rx="18"
+                          fill="#e5f1df"
+                          stroke="#c8ddc7"/>
+
+                    <text x="367" y="217"
+                          class="decor-label"
+                          text-anchor="middle">GREEN SPACE</text>
+
+                    <text x="367" y="235"
+                          class="decor-label"
+                          text-anchor="middle">CAMPUS GARDEN</text>
+
+                </g>
+
+                <g id="roads"></g>
+                <g id="locations"></g>
+
+            </svg>
+
+        </div>
+
+        <div class="map-footer">
+            <span id="mapStatus">Map loading...</span>
+            <span>Green lines show the selected route.</span>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
